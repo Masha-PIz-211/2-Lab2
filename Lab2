@@ -1,0 +1,125 @@
+/* ********************** *
+* Власова Мария 
+*ООП на С#
+* ***********************/
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace N2
+{
+    class Singleton
+    {
+        private static Singleton instance;
+        
+        private Singleton()
+        { }
+        
+        public static Singleton getInstance()
+        {
+            if (instance == null)
+                instance = new Singleton();
+            return instance;
+        }
+    }
+    
+    class EDocument
+    {
+        protected static EDocument instance = null;
+        public EDocument() { }
+        protected string type = "Электронный документ";
+        public static EDocument getInstance(string Title, string Author, string Theme, string Path, List<string> Keywords, string type = "Электронный документ")
+        {
+            if (instance == null)
+                instance = new EDocument (Title, Author, Theme, Path, Keywords, type);
+            return instance;
+        }
+        protected EDocument (string Title, string Author, string Theme, string Path, List<string> Keywords, string type = "Электронный документ")
+        {
+            this.Title = Title;
+            this.Author = Author;
+            this.Theme = Theme;
+            this.Path = Path;
+            this.Keywords = Keywords;
+            this.type = type;
+        }
+        public string Title { get; private set; } = "";
+        public string Author { get; private set; } = "";
+        public List<string> Keywords { get; private set; } = new List<string>();
+        public string Theme { get; private set; } = "";
+        public string Path { get; private set; } = "";
+        public override string ToString()
+        {
+            string result = type + " " + Title + " " + Author + " ";
+            return result;
+        }
+        public static void DropInstance() { instance = null; }
+    }
+    
+    class Excel : EDocument
+    {
+        public static EDocument getInstance(string Title,  string Author, string Theme, string Path, List<string> Keywords)
+        {
+            return EDocument.getInstance(Title, Author, Theme, Path, Keywords, "MS Excel");
+        }
+    }
+    
+     class PDF : EDocument
+    {
+        public static EDocument getInstance(string Title,  string Author, string Theme, string Path, List<string> Keywords)
+        {
+            return EDocument.getInstance(Title, Author, Theme, Path, Keywords, "Portable");
+        }
+    }
+    
+     class TXT : EDocument
+    {
+        public static EDocument getInstance(string Title,  string Author, string Theme, string Path, List<string> Keywords)
+        {
+            return EDocument.getInstance(Title, Author, Theme, Path, Keywords, "Text");
+        }
+    }
+    
+     class WORD : EDocument
+    {
+        public static EDocument getInstance(string Title,  string Author, string Theme, string Path, List<string> Keywords)
+        {
+            return EDocument.getInstance(Title, Author, Theme, Path, Keywords, "MS Word");
+        }
+    }
+    
+     class HTML : EDocument
+    {
+        public static EDocument getInstance(string Title,  string Author, string Theme, string Path, List<string> Keywords)
+        {
+            return EDocument.getInstance(Title, Author, Theme, Path, Keywords, "html");
+        }
+    }
+    
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            EDocument doc = Excel.getInstance("Table", "Student", "Demo", "C:\\Temp\\", new List<string>() { "Key", "Ключ"});
+            Console.WriteLine(doc);
+            EDocument.DropInstance();
+            doc = PDF.getInstance("PDF", "Student", "Demo", "C:\\Temp\\", new List<string>() { "Key", "Ключ"});
+            Console.WriteLine(doc);
+            EDocument.DropInstance();
+            doc = TXT.getInstance("Plain text", "Student", "Demo", "C:\\Temp\\", new List<string>() { "Key", "Ключ"});
+            Console.WriteLine(doc);
+            EDocument.DropInstance();
+            doc = HTML.getInstance("Hypertext document", "Student", "Demo", "C:\\Temp\\", new List<string>() { "Key", "Ключ"});
+            Console.WriteLine(doc);
+            EDocument.DropInstance();
+            doc = WORD.getInstance("MS Word document", "Student", "Demo", "C:\\Temp\\", new List<string>() { "Key", "Ключ"});
+            Console.WriteLine(doc);
+            EDocument.DropInstance();
+            Console.ReadKey();
+        }
+    }
+}
